@@ -1,0 +1,279 @@
+package com.james.mobile.dev
+
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.james.mobile.dev.MyDialog
+import java.util.*
+
+class MainActivity : AppCompatActivity() {
+
+    private var myScore = 0
+    var varRandMole = 0
+    private var mTimeView: TextView? = null
+    private var mScoreView: TextView? = null
+    private var varLives = 5
+    var handler = Handler(Looper.myLooper()!!)
+    var varClose = false
+    private val maxTime = 60 * 1000
+    private val stepTime = (1 * 1000).toLong()
+    var timeInterval = 1000
+    var moleUpTime = 350
+    var mTimer: CountDownTimer = MyTimer(maxTime, stepTime)
+    var molesClick = arrayOfNulls<ImageView>(9)
+    var yValue = 0f
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        mTimeView = findViewById<View>(R.id.textTimeVal) as TextView
+        mScoreView = findViewById<View>(R.id.textScoreVal) as TextView
+
+        MyDialog.showStartDialog(this, RelativeLayout(this), object : MyDialog.OnStartPressed {
+            override fun onStartPressed() {
+                mTimer.start()
+                handler.post(moleLoop)
+            }
+        })
+
+        varClose = false
+
+        molesClick[0] = findViewById<View>(R.id.imageMole1) as ImageView
+        molesClick[1] = findViewById<View>(R.id.imageMole2) as ImageView
+        molesClick[2] = findViewById<View>(R.id.imageMole3) as ImageView
+        molesClick[3] = findViewById<View>(R.id.imageMole4) as ImageView
+        molesClick[4] = findViewById<View>(R.id.imageMole5) as ImageView
+        molesClick[5] = findViewById<View>(R.id.imageMole6) as ImageView
+        molesClick[6] = findViewById<View>(R.id.imageMole7) as ImageView
+        molesClick[7] = findViewById<View>(R.id.imageMole8) as ImageView
+        molesClick[8] = findViewById<View>(R.id.imageMole9) as ImageView
+        yValue = 1f
+    }
+
+    inner class MyTimer(maxTime: Int, stepTime: Long) :
+        CountDownTimer(maxTime.toLong(), stepTime) {
+        override fun onFinish() {
+            mTimer.cancel()
+            handler.removeCallbacks(moleLoop)
+            var lose = false
+            if (varLives < 0) {
+                varLives = 0
+                lose = true
+            }
+
+            MyDialog.showEndDialog(
+                this@MainActivity,
+                RelativeLayout(this@MainActivity),
+                object : MyDialog.OnRestartPressed {
+                    override fun onRestartPressed() {
+                        cancel()
+                        varLives = 5
+                        updateLives(varLives)
+                        myScore = 0
+                        updateScore(myScore)
+                        timeInterval = 1000
+                        moleUpTime = 350
+
+                        mTimer.start()
+                        handler.post(moleLoop)
+                    }
+                },
+                varLives,
+                myScore,
+                lose
+            )
+
+        }
+
+        override fun onTick(millisUntilFinished: Long) {
+            mTimeView?.text = (millisUntilFinished / 1000).toString()
+            if (varLives < 0) {
+                mTimer.cancel()
+                handler.removeCallbacks(moleLoop)
+
+                runOnUiThread {
+                    MyDialog.showEndDialog(
+                        this@MainActivity,
+                        RelativeLayout(this@MainActivity),
+                        object : MyDialog.OnRestartPressed {
+                            override fun onRestartPressed() {
+                                varLives = 5
+                                updateLives(varLives)
+                                myScore = 0
+                                updateScore(myScore)
+                                timeInterval = 1000
+                                moleUpTime = 350
+
+                                mTimer.start()
+                                handler.post(moleLoop)
+                            }
+                        },
+                        varLives,
+                        myScore,
+                        true
+                    )
+                }
+            }
+        }
+    }
+
+
+    private var moleLoop: Runnable = object : Runnable {
+        var varPrevRandMole = 10
+        override fun run() {
+
+            varRandMole = Random().nextInt(8)
+            if (varRandMole == varPrevRandMole) {
+                do varRandMole = Random().nextInt(8) while (varRandMole == varPrevRandMole)
+            }
+            varPrevRandMole = varRandMole
+            molesClick[varRandMole]!!.animate().scaleX(1f).scaleY(1f).duration =
+                100L
+
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    if (!varClose) {
+                        for (i in 0..8) {
+                            if (molesClick[i]!!.scaleX == yValue) {
+                                runOnUiThread {
+                                    molesClick[i]!!.animate().scaleX(0f).scaleY(0f).duration = 20
+                                }
+
+                                varLives -= 1
+                                updateLives(varLives)
+                            }
+                        }
+                    }
+                }
+            }, timeInterval.toLong())
+            if (!varClose) {
+                handler.postDelayed(this, timeInterval.toLong())
+            }
+        }
+    }
+
+    private fun updateScore(Score: Int) {
+        mScoreView!!.text = Score.toString()
+    }
+
+    fun onClick(v: View) {
+        when (v.id) {
+            R.id.imageMole1 -> if (molesClick[0]!!.scaleX > 0.8f) {
+                molesClick[0]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole2 -> if (molesClick[1]!!.scaleX > 0.8f) {
+                molesClick[1]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole3 -> if (molesClick[2]!!.scaleX > 0.8f) {
+                molesClick[2]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole4 -> if (molesClick[3]!!.scaleX > 0.8f) {
+                molesClick[3]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole5 -> if (molesClick[4]!!.scaleX > 0.8f) {
+                molesClick[4]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole6 -> if (molesClick[5]!!.scaleX > 0.8f) {
+                molesClick[5]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole7 -> if (molesClick[6]!!.scaleX > 0.8f) {
+                molesClick[6]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole8 -> if (molesClick[7]!!.scaleX > 0.8f) {
+                molesClick[7]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+            R.id.imageMole9 -> if (molesClick[8]!!.scaleX > 0.8f) {
+                molesClick[8]!!.animate().scaleX(0f).scaleY(0f).duration = 30
+                directHit()
+            }
+        }
+    }
+
+    private fun directHit() {
+        myScore += 1
+        updateScore(myScore)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        varClose = true
+        mTimer.cancel()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        varClose = true
+        mTimer.cancel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        varClose = false
+    }
+
+    fun updateLives(Lives: Int) {
+        val heart1 = findViewById<View>(R.id.imageHeart1) as ImageView
+        val heart2 = findViewById<View>(R.id.imageHeart2) as ImageView
+        val heart3 = findViewById<View>(R.id.imageHeart3) as ImageView
+        val heart4 = findViewById<View>(R.id.imageHeart4) as ImageView
+        val heart5 = findViewById<View>(R.id.imageHeart5) as ImageView
+
+        // Start taking off lives, when none are left, call our game end method
+        if (Lives == 5) {
+            runOnUiThread {
+                heart5.setImageResource(R.drawable.placeholder_heart)
+                heart4.setImageResource(R.drawable.placeholder_heart)
+                heart3.setImageResource(R.drawable.placeholder_heart)
+                heart2.setImageResource(R.drawable.placeholder_heart)
+                heart1.setImageResource(R.drawable.placeholder_heart)
+            }
+        }
+        when (Lives) {
+            4 -> {
+                runOnUiThread {
+                    heart5.setImageResource(R.drawable.placeholder_heart_empty)
+                }
+                varLives = 4
+
+            }
+            3 -> {
+                runOnUiThread {
+                    heart4.setImageResource(R.drawable.placeholder_heart_empty)
+                }
+                varLives = 3
+            }
+            2 -> {
+                runOnUiThread {
+                    heart3.setImageResource(R.drawable.placeholder_heart_empty)
+                }
+                varLives = 2
+            }
+            1 -> {
+                runOnUiThread {
+                    heart2.setImageResource(R.drawable.placeholder_heart_empty)
+                }
+                varLives = 1
+            }
+            0 -> {
+                runOnUiThread {
+                    heart1.setImageResource(R.drawable.placeholder_heart_empty)
+                }
+                varLives = 0
+            }
+        }
+    }
+}
