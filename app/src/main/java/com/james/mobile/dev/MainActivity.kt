@@ -35,13 +35,6 @@ class MainActivity : AppCompatActivity() {
         mTimeView = findViewById<View>(R.id.textTimeVal) as TextView
         mScoreView = findViewById<View>(R.id.textScoreVal) as TextView
 
-        MyDialog.showStartDialog(this, RelativeLayout(this), object : MyDialog.OnStartPressed {
-            override fun onStartPressed() {
-                mTimer.start()
-                handler.post(moleLoop)
-            }
-        })
-
         varClose = false
 
         molesClick[0] = findViewById<View>(R.id.imageMole1) as ImageView
@@ -126,8 +119,8 @@ class MainActivity : AppCompatActivity() {
 
     private var moleLoop: Runnable = object : Runnable {
         var varPrevRandMole = 10
-        override fun run() {
 
+        override fun run() {
             varRandMole = Random().nextInt(8)
             if (varRandMole == varPrevRandMole) {
                 do varRandMole = Random().nextInt(8) while (varRandMole == varPrevRandMole)
@@ -142,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                         for (i in 0..8) {
                             if (molesClick[i]!!.scaleX == yValue) {
                                 runOnUiThread {
-                                    molesClick[i]!!.animate().scaleX(0f).scaleY(0f).duration = 20
+                                    molesClick[i]!!.animate().scaleX(0f).scaleY(0f).duration = 10
                                 }
 
                                 varLives -= 1
@@ -152,6 +145,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }, timeInterval.toLong())
+
             if (!varClose) {
                 handler.postDelayed(this, timeInterval.toLong())
             }
@@ -213,17 +207,37 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         varClose = true
         mTimer.cancel()
+        handler.removeCallbacks(moleLoop)
+        varLives = 5
+        updateLives(varLives)
+        myScore = 0
+        updateScore(myScore)
+        timeInterval = 1000
+        moleUpTime = 350
     }
 
     override fun onStop() {
         super.onStop()
         varClose = true
         mTimer.cancel()
+        handler.removeCallbacks(moleLoop)
+        varLives = 5
+        updateLives(varLives)
+        myScore = 0
+        updateScore(myScore)
+        timeInterval = 1000
+        moleUpTime = 350
     }
 
     override fun onResume() {
         super.onResume()
         varClose = false
+        MyDialog.showStartDialog(this, RelativeLayout(this), object : MyDialog.OnStartPressed {
+            override fun onStartPressed() {
+                mTimer.start()
+                handler.post(moleLoop)
+            }
+        })
     }
 
     private fun playSound() {
@@ -243,7 +257,6 @@ class MainActivity : AppCompatActivity() {
         val heart4 = findViewById<View>(R.id.imageHeart4) as ImageView
         val heart5 = findViewById<View>(R.id.imageHeart5) as ImageView
 
-        // Start taking off lives, when none are left, call our game end method
         if (Lives == 5) {
             runOnUiThread {
                 heart5.setImageResource(R.drawable.placeholder_heart)
