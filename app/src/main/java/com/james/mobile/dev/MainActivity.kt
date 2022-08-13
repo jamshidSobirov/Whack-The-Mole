@@ -1,5 +1,6 @@
 package com.james.mobile.dev
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -9,7 +10,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.james.mobile.dev.MyDialog
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             mTimer.cancel()
             handler.removeCallbacks(moleLoop)
             var lose = false
-            if (varLives < 0) {
+            if (varLives <= 0) {
                 varLives = 0
                 lose = true
             }
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onTick(millisUntilFinished: Long) {
             mTimeView?.text = (millisUntilFinished / 1000).toString()
-            if (varLives < 0) {
+            if (varLives <= 0) {
                 mTimer.cancel()
                 handler.removeCallbacks(moleLoop)
 
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                                 handler.post(moleLoop)
                             }
                         },
-                        varLives,
+                        0,
                         myScore,
                         true
                     )
@@ -206,6 +206,7 @@ class MainActivity : AppCompatActivity() {
     private fun directHit() {
         myScore += 1
         updateScore(myScore)
+        playSound()
     }
 
     override fun onPause() {
@@ -223,6 +224,16 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         varClose = false
+    }
+
+    private fun playSound() {
+        var mPlayerWhack = MediaPlayer.create(applicationContext, R.raw.whack);
+        mPlayerWhack.setOnCompletionListener { mp ->
+            mp.reset()
+            mp.release()
+            mPlayerWhack = null
+        }
+        mPlayerWhack.start()
     }
 
     fun updateLives(Lives: Int) {
