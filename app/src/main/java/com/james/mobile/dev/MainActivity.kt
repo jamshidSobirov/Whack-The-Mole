@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,11 +34,16 @@ class MainActivity : AppCompatActivity() {
     var molesClick = arrayOfNulls<ImageView>(9)
     var yValue = 0f
 
+    lateinit var adView: FrameLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mTimeView = findViewById<View>(R.id.textTimeVal) as TextView
         mScoreView = findViewById<View>(R.id.textScoreVal) as TextView
+        adView = findViewById(R.id.bannerAdView)
+        MobileAds.initialize(applicationContext)
+        setUpAdView()
 
         varClose = false
 
@@ -58,6 +68,9 @@ class MainActivity : AppCompatActivity() {
             if (varLives <= 0) {
                 varLives = 0
                 lose = true
+                playGameOverSound()
+            } else {
+                playWinGameSound()
             }
 
             MyDialog.showEndDialog(
@@ -72,9 +85,10 @@ class MainActivity : AppCompatActivity() {
                         updateScore(myScore)
                         timeInterval = 1000
                         moleUpTime = 350
-
                         mTimer.start()
                         handler.post(moleLoop)
+
+                        setUpAdView()
                     }
                 },
                 varLives,
@@ -87,6 +101,9 @@ class MainActivity : AppCompatActivity() {
         override fun onTick(millisUntilFinished: Long) {
             mTimeView?.text = (millisUntilFinished / 1000).toString()
             if (varLives <= 0) {
+                runOnUiThread {
+                    playGameOverSound()
+                }
                 mTimer.cancel()
                 handler.removeCallbacks(moleLoop)
 
@@ -102,9 +119,10 @@ class MainActivity : AppCompatActivity() {
                                 updateScore(myScore)
                                 timeInterval = 1000
                                 moleUpTime = 350
-
                                 mTimer.start()
                                 handler.post(moleLoop)
+
+                                setUpAdView()
                             }
                         },
                         0,
@@ -136,6 +154,7 @@ class MainActivity : AppCompatActivity() {
                             if (molesClick[i]!!.scaleX == yValue) {
                                 runOnUiThread {
                                     molesClick[i]!!.animate().scaleX(0f).scaleY(0f).duration = 10
+                                    playWrongSound()
                                 }
 
                                 varLives -= 1
@@ -199,8 +218,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun directHit() {
         myScore += 1
+        timeInterval -= 6
         updateScore(myScore)
         playSound()
+
     }
 
     override fun onPause() {
@@ -242,6 +263,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun playSound() {
         var mPlayerWhack = MediaPlayer.create(applicationContext, R.raw.whack);
+        mPlayerWhack.setOnCompletionListener { mp ->
+            mp.reset()
+            mp.release()
+            mPlayerWhack = null
+        }
+        mPlayerWhack.start()
+    }
+
+    private fun playWrongSound() {
+        var mPlayerWhack = MediaPlayer.create(applicationContext, R.raw.wrong);
+        mPlayerWhack.setOnCompletionListener { mp ->
+            mp.reset()
+            mp.release()
+            mPlayerWhack = null
+        }
+        mPlayerWhack.start()
+    }
+
+    private fun playGameOverSound() {
+        var mPlayerWhack = MediaPlayer.create(applicationContext, R.raw.game_over);
+        mPlayerWhack.setOnCompletionListener { mp ->
+            mp.reset()
+            mp.release()
+            mPlayerWhack = null
+        }
+        mPlayerWhack.start()
+    }
+
+    private fun playWinGameSound() {
+        var mPlayerWhack = MediaPlayer.create(applicationContext, R.raw.win_game);
         mPlayerWhack.setOnCompletionListener { mp ->
             mp.reset()
             mp.release()
@@ -300,4 +351,49 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setUpAdView() {
+        val ad = AdView(this)
+        ad.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                adView.visibility = GONE
+
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adView.visibility = VISIBLE
+            }
+        }
+
+        ad.also {
+            val adRequest = AdRequest.Builder().build()
+            it.setAdSize(adSize)
+            it.adUnitId = "ca-app-pub-3940256099942544/6300978111"
+            it.loadAd(adRequest)
+            adView.addView(it)
+        }
+
+
+    }
+
+    private val adSize: AdSize
+        get() {
+            val display = windowManager.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display.getMetrics(outMetrics)
+
+            val density = outMetrics.density
+
+            var adWidthPixels = adView.width.toFloat()
+            if (adWidthPixels == 0f) {
+                adWidthPixels = outMetrics.widthPixels.toFloat()
+            }
+
+            val adWidth = (adWidthPixels / density).toInt()
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+        }
+
+
 }
