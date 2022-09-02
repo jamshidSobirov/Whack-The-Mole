@@ -3,7 +3,6 @@
 <!--Game Activity Main Layouts-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,6 +19,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
@@ -115,10 +115,10 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/bannerAdView"
             android:layout_centerHorizontal="true"
             android:layout_marginHorizontal="12dp"
             android:layout_marginBottom="8dp"
-            android:layout_above="@id/bannerAdView"
             android:backgroundTint="#B79E6F50"
             app:cardCornerRadius="12dp">
 
@@ -161,15 +161,16 @@
             android:id="@+id/bannerAdView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_alignParentBottom="true" />
 
 
         <LinearLayout
             android:id="@+id/gameCanvas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_below="@id/status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:orientation="vertical">
 
 
@@ -190,7 +191,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
+
 
                     <ImageView
                         android:id="@+id/imageMole1"
@@ -199,7 +209,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -216,7 +226,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole2"
@@ -225,7 +243,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -241,7 +259,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole3"
@@ -250,7 +276,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -277,7 +303,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole4"
@@ -286,7 +320,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -302,7 +336,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole5"
@@ -311,7 +353,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -327,7 +369,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole6"
@@ -336,7 +386,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -363,7 +413,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole7"
@@ -372,7 +430,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -389,7 +447,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole8"
@@ -398,7 +464,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />
@@ -414,7 +480,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
+                        android:padding="8dp"
                         android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        android:src="@drawable/holebk" />
 
                     <ImageView
                         android:id="@+id/imageMole9"
@@ -423,7 +497,7 @@
                         android:layout_margin="15dp"
                         android:adjustViewBounds="true"
                         android:onClick="onClick"
-                        android:padding="10dp"
+                        android:padding="14dp"
                         android:scaleX="0"
                         android:scaleY="0"
                         android:src="@drawable/mole2" />

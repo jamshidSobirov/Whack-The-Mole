@@ -7,8 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -357,7 +356,7 @@ class MainActivity : AppCompatActivity() {
         ad.adListener = object : AdListener() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
-                adView.visibility = GONE
+                adView.visibility = INVISIBLE
 
             }
 
@@ -370,6 +369,7 @@ class MainActivity : AppCompatActivity() {
         ad.also {
             val adRequest = AdRequest.Builder().build()
             it.setAdSize(adSize)
+//            it.adUnitId = "ca-app-pub-5110564680408312/9374556161"
             it.adUnitId = "ca-app-pub-3940256099942544/6300978111"
             it.loadAd(adRequest)
             adView.addView(it)
