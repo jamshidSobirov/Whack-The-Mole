@@ -112,56 +112,61 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bannerAdView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#B79E6F50"
-            app:cardCornerRadius="12dp">
-
-            <RelativeLayout
-                android:id="@+id/bottomBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="2dp"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/textScoreLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/my_font"
-                    android:text="@string/str_score_label"
-                    android:textColor="@color/white"
-                    android:textSize="12pt" />
-
-                <TextView
-                    android:id="@+id/textScoreVal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/textScoreLbl"
-                    android:fontFamily="@font/my_font"
-                    android:text="@string/zero"
-                    android:textColor="@color/white"
-                    android:textSize="12pt" />
-
-            </RelativeLayout>
-
-
-        </androidx.cardview.widget.CardView>
-
-        <FrameLayout
-            android:id="@+id/bannerAdView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#B79E6F50"
+                app:cardCornerRadius="12dp">
+
+                <RelativeLayout
+                    android:id="@+id/bottomBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="2dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textScoreLbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:fontFamily="@font/my_font"
+                        android:text="@string/str_score_label"
+                        android:textColor="@color/white"
+                        android:textSize="12pt" />
+
+                    <TextView
+                        android:id="@+id/textScoreVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textScoreLbl"
+                        android:fontFamily="@font/my_font"
+                        android:text="@string/zero"
+                        android:textColor="@color/white"
+                        android:textSize="12pt" />
+
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:id="@+id/bannerAdView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
 
         <LinearLayout

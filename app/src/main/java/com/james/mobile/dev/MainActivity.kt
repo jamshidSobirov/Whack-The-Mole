@@ -356,7 +356,7 @@ class MainActivity : AppCompatActivity() {
         ad.adListener = object : AdListener() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
-                adView.visibility = INVISIBLE
+                adView.visibility = GONE
 
             }
 
